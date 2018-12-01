@@ -5,7 +5,7 @@
 //5. user has won when entire word is guessed
 
 // pick random word
-// WHILE word hasnt be guessed (remainingLetters > 0){
+// WHILE word hasnt be guessed keep playing game (remainingLetters > 0){
   // DISPLAY user current status
   // GET guess from user
 
@@ -19,11 +19,19 @@
   //ADD letterGuessed to guessedLettersArray
 //}
 
-const underscores = document.getElementById('underscores')
-
+//using global variables bc this project is small enough to keep track
 let currentWord; //api call here for render word
+let currentWordArray;
+let guessedLettersArray = [];
 let livesRemaining = 6; //lives that are left in game
 let remainingLetters = currentWord.count; //letters left to be guessed in word
+let wordLibrary;
+let wordLibraryArray;
+
+let result = document.getElementById("answerArray");
+
+
+//const underscores = document.getElementById('underscores')
 
 //API call for word library
 //create a request variable
@@ -33,35 +41,57 @@ request.withCredentials = "true";
 //running into CORS issues, so i can make the request and have it be on the same origin
 request.onload = function () {
   // Begin accessing JSON data here
-  let wordLibrary = this.response;
-  let wordLibraryArray = wordLibrary.split("/n")
+   wordLibrary = this.response;
+   wordLibraryArray = wordLibrary.split("/n")
   if (request.status >= 200 && request.status < 400) {
-    currentWord = wordLibraryArray[Math.floor(Math.random() * wordLibraryArray.length)];
+    chooseRandomWord();
     console.log(currentWord)
 
   } else {
     console.log('error');
   }
 }
-
-
 // Send request
 request.send();
 
-
-function displayStatus(currentWord){
-  let answerArray = [];
-  for (let i = 0; i < currentWord.length; i++){
-    answerArray[i] = "_";
-  }
-  return answerArray;
-}
 // underscores.innerHTML = currentWord.count
 
-let currentWordArray = currentWord.split('');
-let livesRemaining = 6; //lives that are left in game
-let remainingLetters = currentWord.count; //letters left to be guessed in word
-function isCorrectGuess(currentWordArray, letterGuessed) {
+//1. choosing random word and returns currentWord as string
+function chooseRandomWord(){
+  //store random word
+  currentWord = wordLibraryArray[Math.floor(Math.random() * wordLibraryArray.length)];
+  currentWordArray = currentWord.split('');
+  displayStatus(currentWord);
+}
+
+//shows underscores or letters guessed correctly on game board
+function displayStatus(word){
+  let answerArray = [];
+  for (let i = 0; i < currentWordArray.length; i++){
+    if (letterGuessed.includes(currentWordArray[i])) {
+      answerArray[i] = currentWordArray[i];
+    } else {
+      answerArray[i] = "_";
+    }
+  }
+  return answerArray.innerHTML;
+}
+
+//note:put take guesss somewhere
+//2. take user's guess
+function takeGuess(letter){
+  //assume i have an input box or buttons
+  guessedLettersArray.push(letter);
+  isCorrectGuess(letter)
+  if (livesRemaining < 1) {
+    endGame("Game Over ;(");
+  } else if (remainingLetters < 1) {
+    endGame("You Won!");
+  }
+}
+
+//3. checking if letter guessed is correct
+function isCorrectGuess(letter) {
   // takes in two arguments
   //
   //if false, this should also decrement lives
@@ -69,5 +99,26 @@ function isCorrectGuess(currentWordArray, letterGuessed) {
     livesRemaining -= 1;
   } else {
     remainingLetters -= 1;
+    displayStatus(currentWord)
   }
+}
+
+function endGame(endGamePhrase){
+  //render 'play again' button
+  return endGamePhrase;
+}
+
+function playAgain(){
+  //reset all variables and stored letters arrays
+  //need to reset
+    //guessedLettersArray
+    //currentWordArray
+    //currentWord
+    //livesRemaining
+    //remainingLetters
+  livesRemaining = 6;
+  guessedLettersArray = [];
+  chooseRandomWord(); //setting currentWord to a new random word
+  currentWordArray
+
 }
