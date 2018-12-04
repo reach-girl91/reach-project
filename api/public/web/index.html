@@ -2,10 +2,23 @@
 <html>
 <head>
 <title>Hangman Game</title>
+<style>
+button:disabled {
+  opacity: .20;
+}
+</style>
 </head>
 
 <body>
   <h2>Gallow's Pole</h2>
+  <div style="float: right;">
+    <div id="wrongLetterBank">
+
+    </div>
+    <h5 style="margin-top: 10px;">Wrong Letter Bank</h5>
+  <!-- add border -->
+  </div>
+  <br>
   <div id="status">
   <p>loading...</p>
   </div>
@@ -16,8 +29,9 @@
     </div>
     <br>
     <div id="endOfGame">
-
+      Lives Remaining: 6
     </div>
+
   </div>
   <script src="hangman.js"></script>
 </body>

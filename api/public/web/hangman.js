@@ -23,15 +23,17 @@
 let currentWord; //api call here for render word
 let currentWordArray;
 let guessedLettersArray = [];
+let wrongLetters = [];
 let livesRemaining = 6; //lives that are left in game
 let remainingLetters; //letters left to be guessed in word
 let wordLibrary;
 let wordLibraryArray;
 
+let innerHTML = '';
 let result = document.getElementById("status");
+let gameEnding = document.getElementById("endOfGame");
+let wrongs = document.getElementById("wrongLetterBank");
 
-
-//const underscores = document.getElementById('underscores')
 
 //API call for word library
 //create a request variable
@@ -52,7 +54,6 @@ request.onload = function() {
 // Send request
 request.send();
 
-// underscores.innerHTML = currentWord.count
 
 //1. choosing random word and returns currentWord as string
 function chooseRandomWord() {
@@ -81,9 +82,12 @@ function displayStatus(word) {
 //2. take user's guess
 function takeGuess(letter) {
   //assume i have an input box or buttons
+  document.getElementById(`${letter}`).disabled = "disabled";
   guessedLettersArray.push(letter);
   isCorrectGuess(letter)
   if (livesRemaining < 1) {
+    //disables all buttons once game is over
+    document.querySelectorAll("button").forEach(button => button.disabled = "disabled");
     endGame("Game Over ;(");
   } else if (remainingLetters < 1) {
     endGame("You Won!");
@@ -92,59 +96,56 @@ function takeGuess(letter) {
 
 //3. checking if letter guessed is correct
 function isCorrectGuess(letter) {
-  // takes in two arguments
-  //
   //if false, this should also decrement lives
   if (!currentWordArray.includes(letter)) {
     livesRemaining -= 1;
+    gameEnding.innerHTML = "Lives Remaining: " + livesRemaining;
+    wrongLetters.push(letter);
+    displayWrongLetterBank();
   } else {
     remainingLetters -= 1;
     displayStatus(currentWord)
   }
 }
 
+function displayWrongLetterBank(){
+  wrongs.innerHTML = wrongLetters.join(", ");
+}
+
+//4. game ends
 function endGame(endGamePhrase) {
   //render 'play again' button
   console.log(endGamePhrase)
-  let gameEnding = document.getElementById("endOfGame");
-  gameEnding.innerHTML = `${endGamePhrase}`;
-  playAgain();
-
+  gameEnding.innerHTML = `${endGamePhrase}` + `<button style="margin-left: 20px;" onclick="playAgain()">Play Again?</button>`;
 }
+
 
 function playAgain() {
   //reset all variables and stored letters arrays
   //need to reset
+    //livesRemaining
     //guessedLettersArray
+    //wrongLetters
     //currentWordArray
     //currentWord
-    //livesRemaining
     //remainingLetters
   livesRemaining = 6;
   guessedLettersArray = [];
+  wrongLetters = [];
+  gameEnding.innerHTML = 'Lives Remaining: 6';
+  wrongs.innerHTML = ' ';
+  document.querySelectorAll("button").forEach(button => button.disabled = false); //turns buttons back on from being disabled
   chooseRandomWord(); //setting currentWord to a new random word
   currentWordArray;
-  //render play again button
 }
 
 //render buttons for game board
-let alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'x', 'w', 'y', 'z'];
+let alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
-// const docFragment = document.createDocumentFragment();
-
-let innerHTML = '';
 
 alphabet.forEach(function(letter) {
-  innerHTML += `<button class="alphabet__letter" onclick="takeGuess('${letter}')">${letter}</button>`;
+  innerHTML += `<button id="${letter}" onclick="takeGuess('${letter}')">${letter}</button>`;
 });
 
 const alphabetElement = document.querySelector('.alphabet');
 alphabetElement.innerHTML = innerHTML;
-
-
-//need to show livesRemaining
-//need to show letters that were guess aka dim buttons (turn them off)
-//need to show remainingLetters
-//bugs: when i click on the same letter twice, my life decrements, need to disable guessing letter again
-//bugs: lives keep decrementing past 0 End Game
-//need to list incorrect guesses (wrong letter bank)
