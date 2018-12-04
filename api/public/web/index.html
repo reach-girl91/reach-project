@@ -9,29 +9,27 @@ button:disabled {
 </style>
 </head>
 
-<body style="font-family: Helvetica; font-weight: lighter;">
+<body style="font-family: Helvetica; font-weight: lighter; text-align: center; display: inline-block;">
   <h2 style="font-weight: lighter;">Gallow's Pole</h2>
-  <div style="float: right; width: 600px;">
-    <div id="wrongLetterBank">
-
-    </div>
-    <h5 style="margin-top: 10px; font-weight: lighter;">Wrong Letter Bank</h5>
-  <!-- add border -->
-  </div>
   <br>
   <div id="status">
   <p>loading...</p>
   </div>
   <br>
   <div>
-    <div style="width: 200px;" class="alphabet">
+    <div style="width: 200px; text-align: center; display: inline-block; padding-bottom: 20px;" class="alphabet">
 
     </div>
     <br>
     <div id="endOfGame">
       Lives Remaining: 6
     </div>
+    <div style="float: right; width: 600px; padding-top: 20px;">
+      <div id="wrongLetterBank">
 
+      </div>
+      <h5 style="margin-top: 10px; font-weight: lighter;">Wrong Letter Bank</h5>
+    </div>
   </div>
   <script src="hangman.js"></script>
 </body>
