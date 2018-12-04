@@ -20,14 +20,14 @@
 //}
 
 //using global variables bc this project is small enough to keep track
-let currentWord; //api call here for render word
-let currentWordArray;
-let guessedLettersArray = [];
-let wrongLetters = [];
-let livesRemaining = 6; //lives that are left in game
+let currentWord; //api call and chooses randomword, get set as currentWord
+let currentWordArray; //word gets split from string by letter into an array
+let guessedLettersArray = []; //letters that get guessed are pushed into this array
+let wrongLetters = []; //incorrectly guessed letters
+let livesRemaining = 6; //lives that are left in game, starting at 6 lives
 let remainingLetters; //letters left to be guessed in word
-let wordLibrary;
-let wordLibraryArray;
+let wordLibrary; //api call to all the words
+let wordLibraryArray; //all the words get split by line/word
 
 let innerHTML = '';
 let result = document.getElementById("status");
@@ -77,8 +77,6 @@ function displayStatus(word) {
   return result.innerHTML = answerArray;
 }
 
-
-//note:put take guesss somewhere
 //2. take user's guess
 function takeGuess(letter) {
   //assume i have an input box or buttons
